@@ -8,8 +8,16 @@ class User {
     return getDB().collection("users").insertOne(user)
   }
 
-  static findByEmail(email) {
-    return getDB().collection("users").findOne({email})
+  static findByEmail(emailAdress) {
+    return getDB().collection("users").findOne({emailAdress})
+  }
+
+  static findByAccNo(accountNumber) {
+    return getDB().collection("users").findOne({accountNumber})
+  }
+
+  static findByIdNo(idNumber) {
+    return getDB().collection("users").findOne({idNumber})
   }
 }
 

@@ -3,7 +3,9 @@ const UserController = require("../controllers/userController")
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
-// router.get('/get', UserController.get)
+router.get('/profile/:accNo', UserController.getByAccNumber)
+router.get('/profile/:idNo', UserController.getByIdNumber)
+
 
 
 module.exports = router
