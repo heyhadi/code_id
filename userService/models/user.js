@@ -12,13 +12,17 @@ class User {
     return getDB().collection("users").findOne({emailAdress})
   }
 
-  static findByAccNo(accountNumber) {
-    return getDB().collection("users").findOne({accountNumber})
+  static findById(id) {
+    return getDB().collection("users").findOne(id)
   }
 
-  static findByIdNo(idNumber) {
-    return getDB().collection("users").findOne({idNumber})
-  }
+  static async update(id, user) {
+    return getDB().collection('users').updateOne(id, { $set:user})
+}
+
+static async delete(id) {
+  return getDB().collection('users').deleteOne(id)
+}
 }
 
 module.exports = User

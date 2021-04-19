@@ -1,6 +1,7 @@
 const express = require('express')
 const {connect} = require('./mongodb')
 const app = express()
+const cors = require('cors')
 const PORT = process.env.PORT || 4001
 const routes = require('./routes/index')
 const errorHandler = require('./middlewares/errorHandler')
@@ -10,7 +11,7 @@ app.get('/', (req, res) => {
     res.send('jalan bang')
 })
 
-
+app.use(cors())
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));

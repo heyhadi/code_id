@@ -1,9 +1,13 @@
 const { comparePassword } = require("../helpers/bcrypt")
 const User = require("../models/user")
 const { generateToken } = require("../helpers/jwt")
-const { json } = require("express")
+// const { json } = require("express")
+const { ObjectId } = require('mongodb');
+
 
 class UserController {
+
+  // REGISTER
   static async register (req, res, next) {
     try {
         const { userName, emailAdress, password, accountNumber, identityNumber } = req.body
@@ -21,6 +25,7 @@ class UserController {
       }
     }
 
+//LOGIN
 
   static async login (req, res, next) {
     try {
@@ -46,29 +51,18 @@ class UserController {
       }
 
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       res.status(500).json(error.message)
     }
   }
 
-  static async getByAccNumber (req, res, next){
-      try {
-        const { accountNumber } = req.params
-        const user = await User.findByAccNo(accountNumber)
-        delete user.password
-        res.status(200).json(user)
-          
-      } catch (error) {
-          next(error)
-          
-      }
+//GET USER BY ID
 
-  }
-
-  static async getByIdNumber (req, res, next){
+  static async getById (req, res, next){
     try {
-      const { identityNumber } = req.params
-      const user = await User.findByIdNo(identityNumber)
+      const { id } = req.params
+      const filter = { _id: ObjectId(id) };
+      const user = await User.findById(filter)
       delete user.password
       res.status(200).json(user)
         
@@ -77,6 +71,41 @@ class UserController {
         
     }
 
+}
+
+// UPDATE USER DATA
+
+static async update(req, res, next) {
+  try {
+    const { id } = req.params;
+    const filter = { _id: ObjectId(id) };
+    const data = await User.update(filter, req.body);
+    if (data.result.n === 0) {
+      throw { message: "data not found" };
+    }
+    res
+      .status(200)
+      .json({ message: `${data.result.n} data has been updated` });
+  } catch (error) {
+    next (error)
+  }
+}
+
+//DELETE DATA 
+static async delete(req, res) {
+  try {
+    const { id } = req.params;
+    const filter = { _id: ObjectId(id) };
+    const data = await User.delete(filter);
+    if (data.result.n === 0) {
+      throw { message: "data not found" };
+    }
+    res
+      .status(200)
+      .json({ message: `${data.result.n} data has been deleted` });
+  } catch (error) {
+    res.status(404).json(error);
+  }
 }
 
 }
